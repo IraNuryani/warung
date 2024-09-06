@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ItemKategori;
+use App\Models\Item;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreItemKategoriRequest;
-use App\Http\Requests\UpdateItemKategoriRequest;
+use App\Http\Requests\StoreItemRequest;
+use App\Http\Requests\UpdateItemRequest;
 
-class ItemKategoriController extends Controller
+class ItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        // return response()->json(Item::with('kategori')->get());
         try {
-            $kategori = ItemKategori::all();
-            return response()->json($kategori, 200);
+            $items = Item::all();
+            return response()->json($items, 200);
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json(['message' => 'Internal Server Error', 'error' => $e->getMessage()], 500);
         }
+        
     }
 
     /**
@@ -34,14 +36,17 @@ class ItemKategoriController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreItemKategoriRequest $request)
+    public function store(StoreItemRequest $request)
     {
         $request->validate([
-            'item_kategori' => 'required'
+            'item' => 'required',
+            'item_kategori_id' => 'required',
+            'harga' => 'required|integer',
+            'stok' => 'required|integer'
         ]);
 
-        $kategori = ItemKategori::create($request->all());
-        return response()->json($kategori, 201);
+        $items = Item::create($request->all());
+        return response()->json($items, 201);
     }
 
     /**
@@ -50,13 +55,13 @@ class ItemKategoriController extends Controller
     public function show($id)
     {
         try {
-            $kategori = ItemKategori::find($id); 
-    
-            if (!$kategori) {
-                return response()->json(['message' => 'Kategori not found'], 404);
+            $item = Item::with('itemkategori')->find($id);
+
+            if (!$item) {
+                return response()->json(['message' => 'Item not found'], 404);
             }
-    
-            return response()->json($kategori, 200);
+
+            return response()->json($item, 200);
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json(['message' => 'Internal Server Error', 'error' => $e->getMessage()], 500);
@@ -66,7 +71,7 @@ class ItemKategoriController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ItemKategori $itemKategori)
+    public function edit(Item $item)
     {
         //
     }
@@ -74,27 +79,28 @@ class ItemKategoriController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateItemKategoriRequest $request, $id)
+    public function update(UpdateItemRequest $request, $id)
     {
         try {
-            $kategori = ItemKategori::findOrFail($id);
-            $kategori->update($request->validated()); 
-            return response()->json($kategori, 200);
+            $item = Item::findOrFail($id);
+            $item->update($request->validated()); 
+            return response()->json($item, 200);
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json(['message' => 'Internal Server Error', 'error' => $e->getMessage()], 500);
         }
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy( $id)
     {
         try {
-            $kategori = ItemKategori::findOrFail($id);
-            $kategori->delete();
-            return response()->json(['message' => 'Kategori berhasil dihapus'], 200);
+            $item = Item::findOrFail($id);
+            $item->delete();
+            return response()->json(['message' => 'Item berhasil dihapus'], 200);
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json(['message' => 'Internal Server Error', 'error' => $e->getMessage()], 500);

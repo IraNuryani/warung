@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Item;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ItemKategori extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['kategori'];
+    protected $table = 'item_kategoris';
 
-    // public function items()
-    // {
-    //     return $this->hasMany(Item:class);
-    // }
+    protected $fillable = ['item_kategori'];
+
+    public function item()
+    {
+        return $this->hasMany(Item::class);
+    }
 }

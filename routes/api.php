@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemKategoriController;
 
 /*
@@ -17,11 +18,19 @@ use App\Http\Controllers\ItemKategoriController;
 
 
 
-Route::get('/kategori', [ItemKategoriController::class, 'index']); // Get all categories
-Route::post('/kategori', [ItemKategoriController::class, 'store']); // Create a new category
-// Route::get('/item-kategori/{id}', [ItemKategoriController::class, 'show']); // Get a specific category by ID
-// Route::put('/item-kategori/{id}', [ItemKategoriController::class, 'update']); // Update a specific category by ID
-// Route::delete('/item-kategori/{id}', [ItemKategoriController::class, 'destroy']); // Delete a specific category by ID
+Route::get('/kategori', [ItemKategoriController::class, 'index']); 
+Route::post('/kategori', [ItemKategoriController::class, 'store']); 
+Route::put('/kategori/{id}', [ItemKategoriController::class, 'update']); 
+Route::get('/kategori/{id}', [ItemKategoriController::class, 'show']); 
+Route::put('/kategori/{id}', [ItemKategoriController::class, 'update']); 
+Route::delete('/kategori/{id}', [ItemKategoriController::class, 'destroy']); 
+
+Route::get('/item', [ItemController::class, 'index']); 
+Route::post('/item', [ItemController::class, 'store']); 
+Route::get('/item/{id}', [ItemController::class, 'show']);
+Route::put('/item/{id}', [ItemController::class, 'update']); 
+Route::delete('/item/{id}', [ItemController::class, 'destroy']);
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
