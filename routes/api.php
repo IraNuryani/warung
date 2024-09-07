@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PembelianController;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ItemKategoriController;
 
 /*
@@ -36,6 +37,12 @@ Route::post('/pembelian', [PembelianController::class, 'store']);
 Route::get('/pembelian/{id}', [PembelianController::class, 'show']);
 Route::put('/pembelian/{id}', [PembelianController::class, 'update']); 
 Route::delete('/pembelian/{id}', [PembelianController::class, 'destroy']);
+
+Route::get('/penjualan', [PenjualanController::class, 'index']); 
+Route::post('/penjualan', [PenjualanController::class, 'store']); 
+Route::get('/penjualan/{id}', [PenjualanController::class, 'show']);
+Route::put('/penjualan/{id}', [PenjualanController::class, 'update']); 
+Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
