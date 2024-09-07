@@ -66,9 +66,20 @@ class PenjualanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Penjualan $penjualan)
+    public function show($id)
     {
-        //
+        try {
+            $penjualan = Penjualan::with('item')->find($id);
+
+            if (!$penjualan) {
+                return response()->json(['message' => 'Not found'], 404);
+            }
+
+            return response()->json($penjualan, 200);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return response()->json(['message' => 'Internal Server Error', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -116,8 +127,26 @@ class PenjualanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Penjualan $penjualan)
+    public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $penjualan = Penjualan::findOrFail($id);
+            $item = $penjualan->item;
+            $item->stok += $penjualan->jumlah;
+
+            if ($item->stok < 0) {
+                return response()->json(['error' => 'Stok tidak cukup untuk menghapus penjualan ini.'], 400);
+            }
+            $item->save();
+            $penjualan->delete();
+            DB::commit();
+            return response()->json(['message' => 'Penjualan berhasil dihapus dan stok diperbarui.'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

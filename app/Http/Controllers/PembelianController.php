@@ -72,13 +72,13 @@ class PembelianController extends Controller
     public function show($id)
     {
         try {
-            $Pembelian = Pembelian::with('item')->find($id);
+            $pembelian = Pembelian::with('item')->find($id);
 
-            if (!$Pembelian) {
+            if (!$pembelian) {
                 return response()->json(['message' => 'Pembelian not found'], 404);
             }
 
-            return response()->json($Pembelian, 200);
+            return response()->json($pembelian, 200);
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json(['message' => 'Internal Server Error', 'error' => $e->getMessage()], 500);
