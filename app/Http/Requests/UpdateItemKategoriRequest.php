@@ -22,7 +22,7 @@ class UpdateItemKategoriRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'item_kategori' => 'sometimes|string',  // Hanya divalidasi jika dikirim
         ];
     }
 }
