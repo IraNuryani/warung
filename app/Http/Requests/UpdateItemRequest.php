@@ -22,9 +22,9 @@ class UpdateItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'item' => 'sometimes|string',  // Hanya divalidasi jika dikirim
-            'kategori_id' => 'sometimes|integer', // Hanya divalidasi jika dikirim
-            'harga' => 'sometimes|integer', // Hanya divalidasi jika dikirim
+            'item' => 'sometimes|string',  
+            'kategori_id' => 'sometimes|integer', 
+            'harga' => 'sometimes|integer', 
             'stok' => 'sometimes|integer',
         ];
     }

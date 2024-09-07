@@ -34,7 +34,7 @@ Route::delete('/item/{id}', [ItemController::class, 'destroy']);
 Route::get('/pembelian', [PembelianController::class, 'index']); 
 Route::post('/pembelian', [PembelianController::class, 'store']); 
 Route::get('/pembelian/{id}', [PembelianController::class, 'show']);
-// Route::put('/pembelian/{id}', [PembelianController::class, 'update']); 
+Route::put('/pembelian/{id}', [PembelianController::class, 'update']); 
 Route::delete('/pembelian/{id}', [PembelianController::class, 'destroy']);
 
 

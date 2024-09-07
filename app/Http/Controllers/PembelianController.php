@@ -96,9 +96,31 @@ class PembelianController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePembelianRequest $request, Pembelian $pembelian)
+    public function update(UpdatePembelianRequest $request, $id)
     {
-        //
+        DB::beginTransaction();
+
+    try {
+        $pembelian = Pembelian::findOrFail($id);
+        $item = $pembelian->item;
+        $selisih = $request->jumlah - $pembelian->jumlah;
+        $item->stok += $selisih;
+
+        if ($item->stok < 0) {
+            DB::rollBack();
+            return response()->json(['error' => 'Stok tidak cukup.'], 400);
+        }
+
+        $item->save();
+        $pembelian->update($request->validated());
+
+        DB::commit();
+        return response()->json(['message' => 'Pembelian berhasil diupdate dan stok diperbarui.'], 200);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        \Log::error($e->getMessage());
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
     }
 
     /**
@@ -116,12 +138,9 @@ class PembelianController extends Controller
             if ($item->stok < 0) {
                 return response()->json(['error' => 'Stok tidak cukup untuk menghapus pembelian ini.'], 400);
             }
-
             $item->save();
-
             $pembelian->delete();
             DB::commit();
-
             return response()->json(['message' => 'Pembelian berhasil dihapus dan stok diperbarui.'], 200);
         } catch (\Exception $e) {
             DB::rollBack();

@@ -22,7 +22,11 @@ class UpdatePembelianRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'item_id' => 'sometimes|integer',  
+            'jumlah' => 'sometimes|integer', 
+            'total_harga' => 'sometimes|integer',
+            'distributor' => 'sometimes|string', 
+            'tanggal_beli' => 'sometimes|date',
         ];
     }
 }
